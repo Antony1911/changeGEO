@@ -2,13 +2,10 @@ import PySimpleGUI as sg
 import webbrowser
 import pyperclip
 import getpass
-import camelcase
 sg.theme('DarkBlue')
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
-
 
 def get_country():
         layout = [
@@ -18,14 +15,14 @@ def get_country():
             [sg.Button('Copy', size=(10, 1)), sg.Button('Go to geo_list', key='LINK', button_color="#0b68d9")],
         ]
         window = sg.Window(f'geo v0.2 [{getpass.getuser()}]', layout, finalize=True)
-        # window['SEARCH'].bind("<Return>", "+RETURN")
         while True:
             event, values = window.read(close=False)
             if event in (sg.WIN_CLOSED, 'Exit'):
                 break
             
             if event == 'LINK':
-                link = "https://docs.google.com/spreadsheets/d/1H8LMowJnKyn-eqJQNLGk-0JpUB5PoBs8Ns4JDIeM-jo/edit?usp=sharing"
+                # link = "https://docs.google.com/spreadsheets/d/1H8LMowJnKyn-eqJQNLGk-0JpUB5PoBs8Ns4JDIeM-jo/edit?usp=sharing"
+                link = "https://docs.google.com/spreadsheets/d/1wQvjk85tEePvITUwSPjp0rU8nbBD6rLS77Ut1GUT_tg/edit#gid=1822072927"
                 webbrowser.open(link, new=0, autoraise=True)
 
             search = values['SEARCH']
@@ -40,7 +37,8 @@ def get_country():
                     selected = values['LISTBOX']
                     pyperclip.copy(cntr_info[countries.index(selected[0])])
                     
-                    sg.popup_auto_close('Copied!!', auto_close_duration=0.4, no_titlebar=1)
+                    # sg.popup_auto_close('Copied!!', auto_close_duration=0.4, no_titlebar=1)
+                    sg.popup_annoying('Copied!!')
                 except(IndexError):
                     pass
         window.close()
@@ -71,10 +69,10 @@ if __name__ == '__main__':
     
     creds = ServiceAccountCredentials.from_json_keyfile_dict(key_jsfile, scope)
     client = gspread.authorize(creds)
-    sheet = client.open("geo_list").sheet1
+    sheet = client.open("Гео").sheet1
     
-    countries = sheet.col_values(1)
-    cntr_info = sheet.col_values(3)
+    countries = sheet.col_values(3)
+    cntr_info = sheet.col_values(5)
     
     get_country()
     
